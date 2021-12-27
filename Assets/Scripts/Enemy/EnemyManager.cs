@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
@@ -14,16 +15,14 @@ public class EnemyManager : MonoBehaviour
 
         private ObjectPool<Enemy> enemyPool;
 
+        private List<Enemy> activeEnemies;
+
         private Coroutine spawnCoroutine;
 
         private void Awake()
         {
                 enemyPool = new ObjectPool<Enemy>(SpawnEnemy);
-        }
-
-        private void Start()
-        {
-                StartSpawning();
+                activeEnemies = new List<Enemy>();
         }
 
         public void StartSpawning()
@@ -36,6 +35,22 @@ public class EnemyManager : MonoBehaviour
                 if (spawnCoroutine != null)
                 {
                         StopCoroutine(spawnCoroutine);
+                }
+        }
+
+        public void StopAllEnemies()
+        {
+                foreach (var enemy in activeEnemies)
+                {
+                        enemy.StopThinking();
+                }
+        }
+
+        public void RecycleAllEnemies()
+        {
+                foreach (var enemy in activeEnemies)
+                {
+                        enemyPool.ReturnObjectToPool(enemy);
                 }
         }
         
@@ -51,10 +66,13 @@ public class EnemyManager : MonoBehaviour
                         var enemy = enemyPool.GetObjectFromPool();
                         enemy.OnDie = () =>
                         {
+                                activeEnemies.Remove(enemy);
+                                enemy.StopThinking();
                                 enemyPool.ReturnObjectToPool(enemy);
                         };
                         enemy.transform.position = GetRandomPosition();
                         enemy.StartThinking();
+                        activeEnemies.Add(enemy);
                         yield return new WaitForSeconds(spawnDelay);
                 }
         }

@@ -1,8 +1,10 @@
 using System;
 using UnityEngine;
 
-public class BaseProjectile : MonoBehaviour, IPoolable
+public abstract class BaseProjectile : MonoBehaviour, IPoolable
 {
+    [SerializeField]
+    private int damage;
     // Bool = didHit anything?
     public Action<bool> OnDeath;
 
@@ -24,6 +26,6 @@ public class BaseProjectile : MonoBehaviour, IPoolable
     protected void HandleHitWith(GameObject damagedObject)
     {
         var damageable = damagedObject.GetComponent<IDamageable>() ?? damagedObject.GetComponentInParent<IDamageable>();
-        damageable?.OnHit(gameObject);
+        damageable?.OnHit(gameObject, damage);
     }
 }

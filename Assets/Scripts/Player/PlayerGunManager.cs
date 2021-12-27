@@ -1,11 +1,16 @@
 using System.Collections.Generic;
 
+public delegate void GunChangeHandler(Gun oldGun, Gun newGun);
+
 public class PlayerGunManager
 {
     private List<Gun> availableGunList;
     private int currentGunIndex = -1;
 
-    private Gun CurrentGun => currentGunIndex >= 0 && currentGunIndex < availableGunList.Count ? availableGunList[currentGunIndex] : null;
+    public Gun CurrentGun => currentGunIndex >= 0 && currentGunIndex < availableGunList.Count ? availableGunList[currentGunIndex] : null;
+
+    public event GunChangeHandler OnGunChanged;
+
     public PlayerGunManager()
     {
         availableGunList = new List<Gun>();
@@ -14,6 +19,7 @@ public class PlayerGunManager
     public void SetupDependencies(PlayerInput playerInput)
     {
         playerInput.OnFire += OnFire;
+        playerInput.OnReload += OnReload;
         playerInput.OnCycleWeapon += OnGunCycle;
     }
 
@@ -34,6 +40,13 @@ public class PlayerGunManager
         CurrentGun.Shoot();
     }
 
+    private void OnReload(ButtonState buttonState)
+    {
+        if (buttonState != ButtonState.PressDown) return;
+        
+        CurrentGun.Reload();
+    }
+
     private void OnGunCycle(ButtonState buttonState)
     {
         if (buttonState != ButtonState.PressDown) return;
@@ -50,11 +63,19 @@ public class PlayerGunManager
 
     private void SelectGunIndex(int nextGunIndex)
     {
-        if (CurrentGun != null)
+        Gun oldGun = CurrentGun;
+        if (oldGun != null)
         {
-            CurrentGun.gameObject.SetActive(false);
+            oldGun.gameObject.SetActive(false);
+            oldGun.Conceal();
         }
+        
         currentGunIndex = nextGunIndex;
-        CurrentGun.gameObject.SetActive(true);
+        
+        Gun currentGun = CurrentGun;
+        currentGun.gameObject.SetActive(true);
+        currentGun.Prime();
+    
+        OnGunChanged?.Invoke(oldGun, currentGun);
     }
 }

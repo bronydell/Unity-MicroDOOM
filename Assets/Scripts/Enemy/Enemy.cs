@@ -4,26 +4,37 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IPoolable, IDamageable
 {
         [SerializeField]
-        private float movementSpeed; 
+        private float movementSpeed;
         [SerializeField]
-        private Hitbox hitbox; 
+        private int damage; 
+        [SerializeField]
+        private int scorePerKill; 
         
-        public Action OnDie; 
+        public Action OnDie;
 
+        private bool isThinking;
         private Player targetPlayer;
 
         private void Awake()
         {
                 targetPlayer = FindObjectOfType<Player>();
+                isThinking = false;
         }
 
         private void Start()
         {
-                hitbox.OnHit += OnHitTrigger;
+                var hitboxes = GetComponentsInChildren<Hitbox>();
+                foreach (Hitbox hitbox in hitboxes)
+                {
+                        hitbox.OnHit += OnHitTrigger;
+                }
         }
 
         private void Update()
         {
+                // Do not move forward if you are not thinking!
+                if (!isThinking) return;
+                
                 transform.Translate(Vector3.forward * movementSpeed * Time.deltaTime );
         }
 
@@ -39,7 +50,13 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
 
         public void StartThinking()
         {
+                isThinking = true;
                 transform.LookAt(targetPlayer.transform);
+        }
+
+        public void StopThinking()
+        {
+                isThinking = false;
         }
 
         private void OnHitTrigger(GameObject targetObject)
@@ -47,13 +64,15 @@ public class Enemy : MonoBehaviour, IPoolable, IDamageable
                 if (targetObject != targetPlayer.gameObject) return;
 
                 var damageable = targetObject.GetComponent<IDamageable>();
-                damageable?.OnHit(gameObject);
+                damageable?.OnHit(gameObject, damage);
 
-                OnDie.Invoke();
+                OnDie?.Invoke();
         }
 
-        public void OnHit(GameObject source)
+        public void OnHit(GameObject source, int receivedDamage)
         {
+                // Dat nesting is oof...
+                Singleton<GameManager>.Instance.Player.PlayerState.Score += scorePerKill;
                 OnDie?.Invoke();
         }
 }

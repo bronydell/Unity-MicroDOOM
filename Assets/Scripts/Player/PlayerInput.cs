@@ -14,11 +14,27 @@ public class PlayerInput : MonoBehaviour
 {
     public event AxisHandler OnHorizontalAxis;
     public event ButtonHandler OnFire;
+    public event ButtonHandler OnReload;
     public event ButtonHandler OnCycleWeapon;
+
+    private bool isInputActive;
+
+    public void EnableInput()
+    {
+        isInputActive = true;
+    }
+
+    public void DisableInput()
+    {
+        isInputActive = false;
+    }
 
     private void Update()
     {
+        if (!isInputActive) return;
+
         ExecuteButtonHandle("Fire1", OnFire);
+        ExecuteButtonHandle("Reload", OnReload);
         ExecuteButtonHandle("CycleWeapon", OnCycleWeapon);
         OnHorizontalAxis?.Invoke(Input.GetAxis("Horizontal"));
     }

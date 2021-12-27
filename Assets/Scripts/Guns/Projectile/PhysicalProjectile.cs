@@ -10,7 +10,7 @@ public class PhysicalProjectile : BaseProjectile
     [SerializeField]
     private float lifespanTime;
 
-    private new Rigidbody rigidbody;
+    private Rigidbody rigidbody;
     
     private Coroutine lifetimeCoroutine;
 
@@ -42,11 +42,11 @@ public class PhysicalProjectile : BaseProjectile
     {
         base.ReturnToPool();
         rigidbody.velocity = Vector3.zero;
-        if (lifetimeCoroutine != null)
-        {
-            StopCoroutine(lifetimeCoroutine);
-            lifetimeCoroutine = null;
-        }
+
+        if (lifetimeCoroutine == null) return;
+
+        StopCoroutine(lifetimeCoroutine);
+        lifetimeCoroutine = null;
     }
 
     public override void RequestFromPool()

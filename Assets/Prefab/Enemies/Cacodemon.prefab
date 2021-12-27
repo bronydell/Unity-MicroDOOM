@@ -128,7 +128,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 1
-  hitbox: {fileID: 672762642082035701}
+  damage: 40
+  scorePerKill: 10
 --- !u!1 &8222324439861653843
 GameObject:
   m_ObjectHideFlags: 0
