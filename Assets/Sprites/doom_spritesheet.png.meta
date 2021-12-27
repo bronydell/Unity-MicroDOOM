@@ -47,6 +47,9 @@ TextureImporter:
   - first:
       213: -6102739662004259160
     second: projectile_2
+  - first:
+      213: -8129161179927744331
+    second: idle_minigun
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -470,6 +473,27 @@ TextureImporter:
       bones: []
       spriteID: 8a67c817c96be4ba0800000000000000
       internalID: -6102739662004259160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: idle_minigun
+      rect:
+        serializedVersion: 2
+        x: 2121
+        y: 977
+        width: 112
+        height: 85
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b0f28c1afa6f2f80800000000000000
+      internalID: -8129161179927744331
       vertices: []
       indices: 
       edges: []

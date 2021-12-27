@@ -49,6 +49,5 @@ public class GunState
         public void ResetAmmo()
         {
                 CurrentAmmo = maxAmmo;
-                MaxAmmo = maxAmmo;
         }
 }

@@ -1,16 +1,19 @@
 using UnityEngine;
 
+public delegate void ShootHandler();
+
 public class Shooter : MonoBehaviour
 {
     [SerializeField]
     private GameObject projectilePrefab;
     [SerializeField]
     private Transform projectileSpawnPoint;
-
-
+    
     protected Gun targetGun;
-
+    
     private ObjectPool<BaseProjectile> projectilePool;
+
+    public event ShootHandler OnShoot;
     
     public void Setup(Gun gun)
     {
@@ -33,7 +36,6 @@ public class Shooter : MonoBehaviour
             // Not enough ammo!
             return false;
         }
-
         var projectile = projectilePool.GetObjectFromPool();
         projectile.OnDeath = (result) =>
         {
@@ -42,6 +44,9 @@ public class Shooter : MonoBehaviour
         var projectileSpawnTransform = projectileSpawnPoint.transform;
         projectile.transform.SetPositionAndRotation(projectileSpawnTransform.position, projectileSpawnTransform.rotation);
         projectile.Launch();
+    
+        OnShoot?.Invoke();
+        
         return true;
     }
 

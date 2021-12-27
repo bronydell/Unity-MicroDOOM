@@ -21,7 +21,7 @@ public class GameplayState : GenericState
     {
         base.Enter();
         gameplayHUDManager.Show();
-        enemyManager.StartSpawning();
+        // enemyManager.StartSpawning();
         player.Activate();
     }
 

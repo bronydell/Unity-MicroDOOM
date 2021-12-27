@@ -10,6 +10,7 @@ public class Gun : MonoBehaviour
         protected Reloader reloader;
 
         public GunState State { get; private set; }
+        public Shooter Shooter => shooter;
 
         private void Awake()
         {

@@ -8,11 +8,14 @@ public enum ButtonState
 }
 
 public delegate void AxisHandler(float axisValue);
+public delegate void MouseAxisHandler(Vector2 mouseDeltaValue);
 public delegate void ButtonHandler(ButtonState buttonState);
 
 public class PlayerInput : MonoBehaviour
 {
     public event AxisHandler OnHorizontalAxis;
+    public event MouseAxisHandler OnMouseHorizontal;
+    public event AxisHandler OnVerticalAxis;
     public event ButtonHandler OnFire;
     public event ButtonHandler OnReload;
     public event ButtonHandler OnCycleWeapon;
@@ -37,6 +40,8 @@ public class PlayerInput : MonoBehaviour
         ExecuteButtonHandle("Reload", OnReload);
         ExecuteButtonHandle("CycleWeapon", OnCycleWeapon);
         OnHorizontalAxis?.Invoke(Input.GetAxis("Horizontal"));
+        OnVerticalAxis?.Invoke(Input.GetAxis("Vertical"));
+        OnMouseHorizontal?.Invoke(new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")));
     }
 
     private void ExecuteButtonHandle(string actionName, ButtonHandler handler)

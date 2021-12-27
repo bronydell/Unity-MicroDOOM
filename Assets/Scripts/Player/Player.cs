@@ -12,6 +12,7 @@ public class Player : MonoBehaviour, IDamageable
 
         private PlayerGunManager gunManager;
         private PlayerState playerState;
+
         public PlayerState PlayerState => playerState;
         public PlayerGunManager GunManager => gunManager;
         
