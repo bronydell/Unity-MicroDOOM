@@ -2,6 +2,7 @@ public class GunState
 {
         private bool isPrimed;
         private int currentAmmo;
+        private float cooldown;
         private int maxAmmo;
 
         public event IntChangeHandler OnCurrentAmmoChanged;
@@ -35,6 +36,15 @@ public class GunState
                 set
                 {
                         isPrimed = value;
+                }
+        }
+
+        public float Cooldown
+        {
+                get => cooldown;
+                set
+                {
+                        cooldown = value;
                 }
         }
 

@@ -36,11 +36,15 @@ public class Player : MonoBehaviour, IDamageable
 
         public void Activate()
         {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
                 input.EnableInput();
         }
 
         public void Deactivate()
         {
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
                 input.DisableInput();
         }
 

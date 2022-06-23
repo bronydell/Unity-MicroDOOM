@@ -129,6 +129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxAmmo: 3
+  cooldown: 0.1
   shooter: {fileID: 5236297906537708762}
   reloader: {fileID: -6084552454354271350}
 --- !u!114 &5236297906537708762
